@@ -4,15 +4,17 @@ import Navbar from './components/Navbar'
 import InputBox from './components/InputBox'
 import MainChat from './components/MainChat'
 import Layout from './components/Layout'
+import GeminiChat from './components/GeminiChat'
+import ResponseCard from './components/ResponseCard'
 
 function App() {
-  const [open , setOpen] = useState(true)
+  
+  const [open , setOpen] = useState(false)
   return (
-    <div className='bg-slate-900  w-screen'>
-     <Navbar/>
-     <History open={open} setOpen={setOpen}/>
-     <MainChat/>
-
+    <div className='bg-slate-900  w-screen h-screen'>
+    <Navbar/>
+    <Layout/>
+    <ResponseCard/>
      
     
     </div>
