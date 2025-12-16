@@ -52,7 +52,7 @@ function LilResponse({Ai}){
   return(
     <div className=''>
     
-        <div className='border mt-15  mx-auto flex-col bg-slate-800 rounded-2xl md:h-120 md:w-100  flex '> 
+        <div className='border mt-15  mx-auto flex-col bg-slate-800 rounded-2xl md:h-120 md:w-80  flex '> 
           <div className='flex gap-2 items-center mx-auto h-15 w-full'>
             <span className='text-green-900 mx-3 text-4xl'><img src={Ai.symbol} className='w-10 h-10' alt="" /></span>
             <div className='text-white'>
