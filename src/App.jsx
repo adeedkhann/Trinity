@@ -4,7 +4,7 @@ function App() {
 
   
   return (
-    <div className='bg-slate-900 pb-3 h-full w-screen '>
+    <div className='bg-slate-900 pb-3 h-screen w-screen '>
     <Navbar/>
     
     <Layout/>
