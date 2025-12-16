@@ -2,8 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     value : "",
-    response : "",
-    loading : false 
+    responseGem : "",
+    responseGroq : "",
+    responseHug:"",
+    loading : false,
+    responded : false
 }
 
 export const InputSlice = createSlice({
@@ -13,11 +16,20 @@ export const InputSlice = createSlice({
         setInput : (state , action) => {
             state.value = action.payload
         },
-        setResponse : (state , action) =>{
-            state.response = action.payload
+        setResponseGroq : (state , action)=>{
+            state.responseGroq = action.payload
+        },
+        setResponseGem : (state , action) =>{
+            state.responseGem = action.payload
         },
         setLoading : (state , action)=>{
             state.loading = action.payload
+        },
+        setResponseHug : (state , action)=>{
+            state.responseHug = action.payload
+        },
+        setResponded : (state , action)=>{
+            state.responded = action.payload
         }
 
         
@@ -25,7 +37,7 @@ export const InputSlice = createSlice({
 })
 
 
-export const {setInput , setLoading , setResponse} = InputSlice.actions
+export const {setInput , setLoading , setResponseGem ,setResponseGroq , setResponseHug , setResponded} = InputSlice.actions
 export default InputSlice.reducer
 
 

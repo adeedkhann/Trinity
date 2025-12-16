@@ -3,12 +3,24 @@ import { FaTelegramPlane } from "react-icons/fa";
 import { useDispatch } from 'react-redux';
 import { 
   setInput, 
-  setResponse as setReduxResponse, 
-  setLoading as setReduxLoading 
+  setResponseGem as setReduxResponseGem,
+  setResponseGroq as setReduxResponseGroq,
+  setResponseHug as setReduxResponseHug,
+  setResponded as setReduxResponded,
+  setLoading as setReduxLoading ,
 } from '../features/InputSlice';
 import { GoogleGenAI } from "@google/genai";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import { DiSafari } from 'react-icons/di';
+import Groq from 'groq-sdk';
+import { InferenceClient } from '@huggingface/inference';
+
+
+
+
+
+
+const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEM_API_KEY , dangerouslyAllowBrowser : true });
+const groq = new Groq({apiKey : import.meta.env.VITE_GROQ_API_KEY, dangerouslyAllowBrowser : true })
+const hug = new InferenceClient(import.meta.env.VITE_HUG_API_KEY);
 
 
 function InputBox() {
@@ -16,75 +28,72 @@ function InputBox() {
     const [text , setText] =useState("")
     const [loading ,setLoading] = useState(false)
 
-
-    const API_KEY = "AIzaSyBgMyo_t2xZ5Gn3IysY5M2PXMWgioixCzg"; 
-
-    const fetchResponse = async ()=>{
-      if(!text) return;
+    const fetchResponse = async ()=>{ 
+      if(!text || loading) return;
         setLoading(true)
         dispatch(setReduxLoading(true))
-        
       try {
+          const result =  ai.models.generateContent({
+          model: "gemini-2.5-flash", 
+          contents: [{ role: "user", parts: [{ text: `answer in only 250 words , and in the last tell that "thanks for using Aai" ${text}` }] }],
+          });
+              
+          const hugPro = hug.chatCompletion({
+          model : "Qwen/Qwen2.5-72B-Instruct",
+          messages : [{role : "user" , content :`answer in only 250 words , and in the last tell that "thanks for using Aai my prompt is" ${text}`}],
+          max_tokens :500,
+          });
+          const completion =  groq.chat.completions.create({
+          messages : [{role : "user" , content : `answer in only 250 words , and in the last tell that "thanks for using Aai" my prompt is ${text}`}],
+          model : "llama-3.1-8b-instant",
+          })
+        const [gemRes, hugRes, groqRes] = await Promise.allSettled([result, hugPro, completion]);
+        if(gemRes.status === "fulfilled"){
+           const responseText = gemRes.value.response ? gemRes.value.response.text() : gemRes.value.text; 
+            dispatch(setReduxResponseGem(responseText));
+        }else{
+          console.error(gemRes.reason)
+          dispatch(setReduxResponseGem("failed to fetch gemini"))
+        }
+        if(hugRes.status === "fulfilled"){
+          dispatch(setReduxResponseHug(hugRes.value.choices[0]?.message?.content || ""))
+        }else{
+          console.error(hugRes.reason)
+          dispatch(setReduxResponseHug("failed to fetch Qwen"))
+        }
+        if(groqRes.status === "fulfilled"){
+          dispatch(setReduxResponseGroq(groqRes.value.choices[0]?.message?.content || ""))
+        }else{
+          console.error(groqRes.reason)
+          dispatch(setReduxResponseGroq("failed to fetch Llama"))
+        }
         
-        // const genAI = new GoogleGenerativeAI(API_KEY);
-        // const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-        // const result = await model.generateContent(text);
-        // const responseText = result.response.text();
-        const ai = new GoogleGenAI({ apiKey: API_KEY });
-        
-                  
-              const result = await ai.models.generateContent({
-                model: "gemini-2.5-flash", 
-                contents: [{ role: "user", parts: [{ text: text }] }],
-              });
         
         dispatch(setInput(text))
-        dispatch(setReduxResponse(result.text))
+       
       } catch (error) {
         alert(error)
         
-        dispatch(setReduxResponse("Error: Failed to fetch response. Check console."))
+        dispatch(setReduxResponseGem("Error: Failed to fetch response. Check console."))
       }finally{
         setLoading(false)
+        dispatch(setReduxResponded(true))
         dispatch(setReduxLoading(false))
+        setText("")
       }
     }
-// const fetchResponse = async () => {
-//         if (!text) return;
-        
-//         setLoading(true)
-//         dispatch(setReduxLoading(true))
 
-//         try {
-//             const genAI = new GoogleGenerativeAI(API_KEY);
-            
-//             // UPDATE: Changed model to "gemini-1.5-pro"
-//             const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
-            
-//             const result = await model.generateContent(text);
-//             const responseText = result.response.text();
-            
-//             dispatch(setInput(text))
-//             dispatch(setReduxResponse(responseText))
-            
-//         } catch (error) {
-//             console.error(error);
-//             dispatch(setReduxResponse("Error: Failed to fetch response. Check console."))
-//         } finally {
-//             setLoading(false)
-//             dispatch(setReduxLoading(false))
-//         }
-//     }
 
   return (
-    <div className='text-white flex flex-col h-30 pb-4 rounded-lg  w-full'>
+    <div className='text-white flex flex-col h-30 rounded-lg  w-full'>
       <div className='m-auto flex'>
-        <span className='m-4 border-2 px-3 py-2 rounded-lg border-gray-700 hover:border-blue-500'><input type="checkbox" /> Gemini <span className='text-xs text-gray-400'>(Google)</span> </span>
-        <span className='m-4 border-2 px-3 py-2 rounded-lg border-gray-700 hover:border-blue-500'><input type="checkbox" /> ChatGpt <span className='text-xs text-gray-400'>(OpenAi)</span> </span>
-        <span className='m-4 border-2 px-3 py-2 rounded-lg border-gray-700 hover:border-blue-500'><input type="checkbox" /> Grok <span className='text-xs text-gray-400'>(XAi)</span></span>
+        <span className='m-4 border-2 px-3 py-2 rounded-lg border-gray-700 hover:border-blue-500'> Llama <span className='text-xs text-gray-400'>(Meta)</span></span>
+        <span className='m-4 border-2 px-3 py-2 rounded-lg border-gray-700 hover:border-blue-500'> Gemini <span className='text-xs text-gray-400'>(Google)</span> </span>
+        <span className='m-4 border-2 px-3 py-2 rounded-lg border-gray-700 hover:border-blue-500'> Qwen <span className='text-xs text-gray-400'>(AliBaba)</span> </span>
+        
         
       </div>
-      <div className='flex m-auto'>
+      <div className='flex mx-auto'>
         <textarea
         value={text}
         onChange={(e)=>setText(e.target.value)}
@@ -92,7 +101,7 @@ function InputBox() {
          rows="1"
          placeholder="Enter your description here..."
         ></textarea>
-        <button onClick={fetchResponse} className='flex ml-3 gap-1  items-center justify-center border border-gray-100 rounded-lg w-30 hover:border-blue-500 hover:bg-slate-500'><span className='text-blue-500'><FaTelegramPlane/> </span>{loading? "Generating" :  "Generate"  }</button>
+        <button disabled={loading} onClick={fetchResponse} className='flex ml-3 gap-1  items-center justify-center border border-gray-100 rounded-lg w-30 hover:border-blue-500 hover:bg-slate-500'><span className='text-blue-500'><FaTelegramPlane/> </span>{loading? "Generating" :  "Generate"  }</button>
       </div>
     </div>
   )
