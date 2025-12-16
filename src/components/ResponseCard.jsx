@@ -1,4 +1,4 @@
-import React, { useRef, useState }  from 'react'
+import { useRef, useState }  from 'react'
 import { MdContentCopy ,MdCheck } from "react-icons/md";
 import { useSelector } from 'react-redux';
 import GemSym from '../assets/GemSym.png';
@@ -44,15 +44,15 @@ function LilResponse({Ai}){
         setCopied(true)
         setTimeout(()=>setCopied(false),2000)
       } catch (error) {
-        alert("error in copy fetch again")
+        alert("error in copy , fetch again")
         console.log(error)
       }
     }
   }
   return(
-    <>
+    <div className=''>
     
-        <div className='border mt-15 mx-auto flex-col bg-slate-800 rounded-2xl  w-100 h-140 flex  '> 
+        <div className='border mt-15  mx-auto flex-col bg-slate-800 rounded-2xl md:h-120 md:w-100  flex '> 
           <div className='flex gap-2 items-center mx-auto h-15 w-full'>
             <span className='text-green-900 mx-3 text-4xl'><img src={Ai.symbol} className='w-10 h-10' alt="" /></span>
             <div className='text-white'>
@@ -71,7 +71,7 @@ function LilResponse({Ai}){
           </div>
         </div>
       
-    </>
+    </div>
   )
 }
 
@@ -81,7 +81,7 @@ function LilResponse({Ai}){
 
 
   return (
-    <div className='flex gap-2 bg-black h-screen'>
+    <div className='flex gap-3 justify-center bg-black md:h-150 md:flex-row flex-col '>
       {AiInfo.map((ai , index)=>
       (<LilResponse Ai={ai} key={index}/>)
 

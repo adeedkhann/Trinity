@@ -1,9 +1,8 @@
-import React from 'react'
 import { FaRegClock } from "react-icons/fa";
 import { IoSearchSharp } from "react-icons/io5";
 import HistoryItem from './HistoryItem';
 
-function History({open , setOpen}) {
+function History() {
   return (
     <div className={`border relative rounded-lg border-slate-500 h-screen ${open ? "w-80 display-none" :"w-0"}`}>
         <h1 className='text-white  text-3xl flex p-2 m-2'><span className='p-1'>< FaRegClock/></span><strong> Chat History</strong></h1>
