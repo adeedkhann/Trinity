@@ -4,7 +4,7 @@ function MainChat() {
   return (
     <div className='w-full  bg-black  '>
       
-      <div className='text-white  rounded-lg flex flex-col items-center h-170 md:h-105 justify-center '>
+      <div className='text-white rounded-lg flex flex-col items-center md:h-105 justify-center '>
         <h1 className='text-5xl mb-5'>{loading? "analysing your sussy baka prompt....." : "Welcome to Trinity"}</h1>
         <p className=' text-xl text-gray-500'>Enter a prompt below and get responses from multiple Ai models simultaneouly </p>
           <p className=' text-xl text-gray-500'>compare insights from Llama , Gemini and Qwen all in one place.
