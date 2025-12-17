@@ -7,7 +7,7 @@ function Layout() {
 
   const responded = useSelector((state)=> state.input.responded)
   return (
-    <div className='flex w-full'>
+    <div className='flex h-screen w-full'>
         
           <div className='flex flex-col gap w-full '>
                     {responded ? <div className=''><ResponseCard/></div> :<MainChat/>}

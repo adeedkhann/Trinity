@@ -6,7 +6,8 @@ const initialState = {
     responseGroq : "",
     responseHug:"",
     loading : false,
-    responded : false
+    responded : false,
+    theme : true,
 }
 
 export const InputSlice = createSlice({
@@ -30,14 +31,17 @@ export const InputSlice = createSlice({
         },
         setResponded : (state , action)=>{
             state.responded = action.payload
-        }
+        },
+        setTheme : ((state ,action)=>{
+            state.theme = action.payload
+        } )
 
         
     }
 })
 
 
-export const {setInput , setLoading , setResponseGem ,setResponseGroq , setResponseHug , setResponded} = InputSlice.actions
+export const {setInput , setLoading , setResponseGem ,setResponseGroq , setResponseHug , setResponded , setTheme} = InputSlice.actions
 export default InputSlice.reducer
 
 

@@ -9,6 +9,7 @@ function ResponseCard() {
 const responseGem = useSelector((state) => state.input.responseGem)
 const responseGroq = useSelector((state)=> state.input.responseGroq)
 const responseHug = useSelector((state) => state.input.responseHug)
+const theme = useSelector((state)=>state.input.theme)
   const AiInfo = [
     {
     name : "Llama",
@@ -52,19 +53,19 @@ function LilResponse({Ai}){
   return(
     <div className=''>
     
-        <div className='border mt-15  mx-auto flex-col bg-slate-800 rounded-2xl md:h-120 md:w-80  flex '> 
+        <div className={`border mt-15 md:h-120 mx-auto flex-col ${theme?"bg-slate-800":"bg-slate-300"} rounded-2xl  md:w-80  flex `}> 
           <div className='flex gap-2 items-center mx-auto h-15 w-full'>
-            <span className='text-green-900 mx-3 text-4xl'><img src={Ai.symbol} className='w-10 h-10' alt="" /></span>
-            <div className='text-white'>
-              <strong className='text-xl'>{Ai.name}</strong>
+            <span className=' mx-3 text-4xl'><img src={Ai.symbol} className='w-10 h-10' alt="" /></span>
+            <div className={`${theme?"text-white":""}`}>
+              <strong className='text-xl '>{Ai.name}</strong>
               <div className='text-slate-600'>{Ai.own}</div>
               
             </div>
             
           </div>
           
-          <div ref={divRef} className='border-y px-2 text-gray-200 h-full text-sm overflow-hidden border-gray-500 '>
-            <p>{Ai.respon}</p>
+          <div ref={divRef} className={`border-y px-2 h-full text-sm overflow-hidden border-gray-500 ${theme?" text-gray-200 ":""} `}>
+            <p className=' tracking-wider'>{Ai.respon}</p>
           </div>
           <div className='my-5 mx-auto text-gray-600'>
             <button onClick={handleCopy}>{copied ?<MdCheck /> : <MdContentCopy/> }</button>
@@ -81,7 +82,7 @@ function LilResponse({Ai}){
 
 
   return (
-    <div className='flex gap-3 justify-center bg-black md:h-150 md:flex-row flex-col '>
+    <div className={`flex gap-3 justify-center ${theme?"bg-black":""} md:h-150 md:flex-row flex-col `}>
       {AiInfo.map((ai , index)=>
       (<LilResponse Ai={ai} key={index}/>)
 
