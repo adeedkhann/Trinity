@@ -53,19 +53,19 @@ function InputBox() {
             dispatch(setReduxResponseGem(responseText));
         }else{
           console.error(gemRes.reason)
-          dispatch(setReduxResponseGem("failed to fetch gemini"))
+          dispatch(setReduxResponseGem("Gemini Server Are OverLoaded"))
         }
         if(hugRes.status === "fulfilled"){
           dispatch(setReduxResponseHug(hugRes.value.choices[0]?.message?.content || ""))
         }else{
           console.error(hugRes.reason)
-          dispatch(setReduxResponseHug("failed to fetch Qwen"))
+          dispatch(setReduxResponseHug("Qwen Server Are OverLoaded"))
         }
         if(groqRes.status === "fulfilled"){
           dispatch(setReduxResponseGroq(groqRes.value.choices[0]?.message?.content || ""))
         }else{
           console.error(groqRes.reason)
-          dispatch(setReduxResponseGroq("failed to fetch Llama"))
+          dispatch(setReduxResponseGroq("Llama Server Are OverLoaded"))
         }
         
         
