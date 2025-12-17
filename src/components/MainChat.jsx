@@ -6,7 +6,7 @@ function MainChat() {
     <div className={`w-full  ${theme? "bg-black ":"bg-white"}`}>
       
       <div className={` ${theme? "text-white ":"text-black"} rounded-lg flex flex-col items-center md:h-105 justify-center `}>
-        <h1 className='text-5xl mb-5'>{loading? "analysing your sussy baka prompt....." : "Welcome to Trinity"}</h1>
+        <h1 className='text-5xl mb-5'>{loading? "analysing your prompt....." : "Welcome to Trinity"}</h1>
         <p className={`text-xl ${theme? "text-gray-500 ":"text-gray-700"} `}>Enter a prompt below and get responses from multiple Ai models simultaneouly </p>
           <p className={`text-xl ${theme? "text-gray-500 ":"text-gray-700"} `}>compare insights from Llama , Gemini and Qwen all in one place.
         </p>
